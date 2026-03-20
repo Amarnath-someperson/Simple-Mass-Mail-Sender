@@ -1,6 +1,7 @@
 # Source - https://stackoverflow.com/a/12424439
 # Posted by David Okwii, modified by community. See post 'Timeline' for change history
 # Retrieved 2026-03-20, License - CC BY-SA 4.0
+#
 import smtplib
 import csv
 from email.mime.text import MIMEText
@@ -10,16 +11,16 @@ import time
 import sys
 
 
-filename_csv = input("csv filename with details of the recipients: ")
-filename_text = input("location of text file for email: ")
+filename_csv = input("\033[34mcsv filename with details of the recipients:\033[0m ")
+filename_text = input("\033[34mlocation of text file for email:\033[0m ")
 
 data = []
 unsent = []
 sent = []
 
-sender = input("sender email id: ")
-pwd = input("sender pwd (use GApps App Password): ")
-subject = input("mail subject: ")
+sender = input("\033[34msender email id:\033[0m ")
+pwd = input("\033[34msender pwd (use GApps App Password):\033[0m ")
+subject = input("\033[34mmail subject:\033[0m ")
 
 
 text = open(filename_text).read()
@@ -81,14 +82,20 @@ t = threading.Thread(target=animate)
 t.start()
 
 #long process here
-for i in data:
-    mail_body = text.replace("<company>", i[1])
-    send_email(sender, pwd, i[0].strip(), subject, mail_body)
 
-with open('unsent.log', 'w') as f:
-    f.write(str(unsent))
+try:
+    for i in data:
+        mail_body = text.replace("<company>", i[1])
+        send_email(sender, pwd, i[0].strip(), subject, mail_body)
 
-with open('sent.log', 'w') as f:
-    f.write(str(sent))
+    with open('unsent.log', 'w') as f:
+        f.write(str(unsent))
+
+    with open('sent.log', 'w') as f:
+        f.write(str(sent))
+except:
+    print(f"\033[2;2H      \033[44m <{c}> [EXCEPTION] Process terminated. Check logs for sent/unsent mails.\033[0m")
+
+    done = True
 
 done = True
